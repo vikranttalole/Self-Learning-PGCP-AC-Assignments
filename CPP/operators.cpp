@@ -23,7 +23,7 @@ int main()
 
     // Ternary Operator
     int max;
-    max = (a > b) ? a : b;
+    max = (a < b) ? a : b;         //10>5? 10:5
     cout << "Ternary Operator (Maximum): " << max << endl;
 
     return 0;
