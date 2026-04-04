@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Axios Example</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+
+<button onclick="getNews()">Get News</button>
+<ul id="news"></ul>
+
+<script>
+function getNews() {
+    axios.get("https://jsonplaceholder.typicode.com/posts")
+        .then(function(response) {
+            let data = response.data;
+            let output = "";
+
+            data.slice(0,5).forEach(item => {
+                output += "<li>" + item.title + "</li>";
+            });
+
+            document.getElementById("news").innerHTML = output;
+        });
+}
+</script>
+
+</body>
+</html>

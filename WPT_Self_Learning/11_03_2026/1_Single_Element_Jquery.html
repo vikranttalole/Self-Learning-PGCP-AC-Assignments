@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Get Single Element</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<p>First Paragraph</p>
+<p>Second Paragraph</p>
+<p>Third Paragraph</p>
+
+<button id="btn">Click Me</button>
+
+<script>
+    $("#btn").click(function() {
+        let first = $("p").first(); // get first element
+        alert(first.text());
+    });
+</script>
+
+</body>
+</html>

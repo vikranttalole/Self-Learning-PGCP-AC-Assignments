@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Change Link</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+
+<a id="myLink" href="https://google.com">Go to Google</a>
+<br><br>
+<button id="change">Change Link</button>
+
+<script>
+    $("#change").click(function() {
+        $("#myLink")
+            .attr("href", "https://github.com")
+            .text("Go to GitHub");
+    });
+</script>
+
+</body>
+</html>
+ <!-- You are having sample data for the link.
+  Write jQuery code to change the hyperlink and the text of an existing link.   -->

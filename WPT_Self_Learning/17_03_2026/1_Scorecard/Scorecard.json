@@ -1,0 +1,8 @@
+{
+    "team1": "India",
+    "team2": "Australia",
+    "score": {
+        "India": 250,
+        "Australia": 200
+    }
+}
