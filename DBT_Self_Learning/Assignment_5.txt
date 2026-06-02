@@ -1,0 +1,210 @@
+Name:Vikrant Sanjay Talole
+PRN:260245920082
+
+Question: 5) Use of flow control statement in Stored Procedure Use of conditional statements in Stored Procedure.
+===========================================================================================================
+mysql> create table employee (empid int primary key, empname varchar(50), salary decimal(10,2));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into employee values (101,'vikrant',50000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee values (102,'rahul',30000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee values (103,'sneha',70000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> table employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|   101 | vikrant | 50000.00 |
+|   102 | rahul   | 30000.00 |
+|   103 | sneha   | 70000.00 |
++-------+---------+----------+
+3 rows in set (0.00 sec)
+=================================================================================================
+1. if statement in stored procedure
+
+====================================================================================================
+delimiter //
+
+create procedure checksalary(in esalary decimal(10,2))
+begin
+if esalary>=50000 then
+select 'high salary' as result;
+end if;
+end //
+
+delimiter ;
+
+mysql> call checksalary(60000);
++-------------+
+| result      |
++-------------+
+| high salary |
++-------------+
+1 row in set (0.01 sec)
+============================================================================================
+2. if else statement
+=========================================================================================
+delimiter //
+
+create procedure salarystatus(in esalary decimal(10,2))
+begin
+if esalary>=50000 then
+select 'high salary' as result;
+else
+select 'low salary' as result;
+end if;
+end //
+
+delimiter ;
+
+mysql> call salarystatus(30000);
++------------+
+| result     |
++------------+
+| low salary |
++------------+
+1 row in set (0.00 sec)
+
+=============================================================================================
+
+3. case statement
+================================================================================================
+
+delimiter //
+
+create procedure departmentname(in did int)
+begin
+case did
+when 1 then select 'it';
+when 2 then select 'hr';
+when 3 then select 'finance';
+else select 'unknown';
+end case;
+end //
+
+delimiter ;
+
+mysql> call departmentname(2);
++----+
+| hr |
++----+
+| hr |
++----+
+1 row in set (0.00 sec)
+================================================================================================
+4. loop statement
+=============================================================================================
+
+delimiter //
+
+create procedure printnumbers()
+begin
+declare i int default 1;
+loop_label: loop
+select i;
+set i=i+1;
+if i>5 then
+leave loop_label;
+end if;
+end loop;
+end //
+
+delimiter ;
+
+mysql> call printnumbers();
++------+
+| i    |
++------+
+|    1 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| i    |
++------+
+|    2 |
++------+
+1 row in set (0.01 sec)
+
++------+
+| i    |
++------+
+|    3 |
++------+
+1 row in set (0.01 sec)
+
++------+
+| i    |
++------+
+|    4 |
++------+
+1 row in set (0.01 sec)
+
++------+
+| i    |
++------+
+|    5 |
++------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+==============================================================================================
+5. while loop
+============================================================================
+
+
+delimiter //
+
+create procedure whiledemo()
+begin
+declare i int default 1;
+while i<=5 do
+select i;
+set i=i+1;
+end while;
+end //
+
+delimiter ;
+mysql> call whiledemo();
++------+
+| i    |
++------+
+|    1 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| i    |
++------+
+|    2 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| i    |
++------+
+|    3 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| i    |
++------+
+|    4 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| i    |
++------+
+|    5 |
++------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)

@@ -1,0 +1,130 @@
+Name:Vikrant Sanjay Talole
+PRN:260245920082
+
+Question: 6) Writing procedures with Declare, fetch and close cursor Example of each type of cursors.
+===========================================================================================================
+
+(declare, open, fetch, close)
+==========================================================================================
+
+delimiter //
+
+create procedure cursordemo()
+begin
+declare v_empid int;
+declare v_empname varchar(50);
+declare done int default 0;
+
+declare emp_cursor cursor for
+select empid,empname from employee;
+
+declare continue handler for not found
+set done=1;
+
+open emp_cursor;
+
+read_loop: loop
+
+fetch emp_cursor into v_empid,v_empname;
+
+if done=1 then
+leave read_loop;
+end if;
+
+select v_empid,v_empname;
+
+end loop;
+
+close emp_cursor;
+
+end //
+
+delimiter ;
+
+
+mysql> call cursordemo();
++---------+-----------+
+| v_empid | v_empname |
++---------+-----------+
+|     101 | vikrant   |
++---------+-----------+
+1 row in set (0.02 sec)
+
++---------+-----------+
+| v_empid | v_empname |
++---------+-----------+
+|     102 | rahul     |
++---------+-----------+
+1 row in set (0.03 sec)
+
++---------+-----------+
+| v_empid | v_empname |
++---------+-----------+
+|     103 | sneha     |
++---------+-----------+
+1 row in set (0.03 sec)
+
+Query OK, 0 rows affected (0.03 sec)
+================================================================================
+Cursor Example using salary
+==========================================================================================
+
+delimiter //
+
+create procedure salarycursor()
+begin
+declare v_name varchar(50);
+declare v_salary int;
+declare done int default 0;
+
+declare cur cursor for
+select empname,salary from employee;
+
+declare continue handler for not found
+set done=1;
+
+open cur;
+
+read_loop: loop
+
+fetch cur into v_name,v_salary;
+
+if done=1 then
+leave read_loop;
+end if;
+
+select v_name,v_salary;
+
+end loop;
+
+close cur;
+
+end //
+
+delimiter ;
+
+mysql> call salarycursor();
++---------+----------+
+| v_name  | v_salary |
++---------+----------+
+| vikrant |    50000 |
++---------+----------+
+1 row in set (0.01 sec)
+
++--------+----------+
+| v_name | v_salary |
++--------+----------+
+| rahul  |    30000 |
++--------+----------+
+1 row in set (0.01 sec)
+
++--------+----------+
+| v_name | v_salary |
++--------+----------+
+| sneha  |    70000 |
++--------+----------+
+1 row in set (0.02 sec)
+
+Query OK, 0 rows affected (0.02 sec)
+
+=======================================================================================

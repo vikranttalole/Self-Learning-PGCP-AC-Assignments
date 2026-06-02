@@ -1,0 +1,81 @@
+Name:Vikrant Sanjay Talole
+PRN:260245920082
+
+Question: 1 Performing basic CREATE, ALTER, DROP Commands
+=======================================================================================================
+
+mysql> CREATE DATABASE CompanyDB;
+Query OK, 1 row affected (0.08 sec)
+
+mysql> USE CompanyDB;
+Database changed
+mysql> create table employee (empid int primary key, empname varchar(50) not null, gender char(1), salary decimal(10,2), joiningdate date, email varchar(100) unique, department varchar(30));
+Query OK, 0 rows affected (0.18 sec)
+
+mysql> insert into employee values (101,'vikrant','m',50000,'2025-01-10','vikrant@gmail.com','it');
+Query OK, 1 row affected (0.06 sec)
+
+mysql> insert into employee values (102,'rahul','m',45000,'2025-02-15','rahul@gmail.com','hr');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee values (103,'sneha','f',55000,'2025-03-20','sneha@gmail.com','finance');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employee;
++-------+---------+--------+----------+-------------+-------------------+------------+
+| empid | empname | gender | salary   | joiningdate | email             | department |
++-------+---------+--------+----------+-------------+-------------------+------------+
+|   101 | vikrant | m      | 50000.00 | 2025-01-10  | vikrant@gmail.com | it         |
+|   102 | rahul   | m      | 45000.00 | 2025-02-15  | rahul@gmail.com   | hr         |
+|   103 | sneha   | f      | 55000.00 | 2025-03-20  | sneha@gmail.com   | finance    |
++-------+---------+--------+----------+-------------+-------------------+------------+
+3 rows in set (0.02 sec)
+
+mysql> alter table employee add mobileno varchar(15);
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee modify empname varchar(100);
+Query OK, 3 rows affected (0.10 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee rename column mobileno to phonenumber;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee drop column phonenumber;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee add constraint chk_salary check (salary > 0);
+Query OK, 3 rows affected (0.12 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> alter table employee drop check chk_salary;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee;
++-------+---------+--------+----------+-------------+-------------------+------------+
+| empid | empname | gender | salary   | joiningdate | email             | department |
++-------+---------+--------+----------+-------------+-------------------+------------+
+|   101 | vikrant | m      | 50000.00 | 2025-01-10  | vikrant@gmail.com | it         |
+|   102 | rahul   | m      | 45000.00 | 2025-02-15  | rahul@gmail.com   | hr         |
+|   103 | sneha   | f      | 55000.00 | 2025-03-20  | sneha@gmail.com   | finance    |
++-------+---------+--------+----------+-------------+-------------------+------------+
+3 rows in set (0.00 sec)
+
+mysql> create table department (deptid int primary key, deptname varchar(50));
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> create table employeedetails (empid int primary key, deptid int, foreign key (deptid) references department(deptid));
+Query OK, 0 rows affected (0.08 sec)
+
+mysql> drop table employeedetails;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> table department;
+Empty set (0.01 sec)
+
+mysql> drop database companydb;
+Query OK, 2 rows affected (0.56 sec)

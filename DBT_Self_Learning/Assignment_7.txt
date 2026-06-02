@@ -1,0 +1,126 @@
+Name:Vikrant Sanjay Talole
+PRN:260245920082
+
+Question: 6) Create Before Triggers Create After Triggers.
+===========================================================================================================
+1. Before Insert Trigger
+========================================================================================
+delimiter //
+
+create trigger before_insert_employee
+before insert on employee
+for each row
+begin
+if new.salary < 0 then
+set new.salary = 0;
+end if;
+end //
+
+delimiter ;
+
+mysql> insert into employee values (108,'rahul',-10000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|   101 | vikrant | 50000.00 |
+|   102 | rahul   | 30000.00 |
+|   103 | sneha   | 70000.00 |
+|   108 | rahul   |     0.00 |
++-------+---------+----------+
+4 rows in set (0.00 sec)
+
+======================================================================================================
+
+2. Before Update Trigger
+========================================================================================
+
+delimiter //
+
+create trigger before_update_employee
+before update on employee
+for each row
+begin
+if new.salary < 0 then
+set new.salary = old.salary;
+end if;
+end //
+
+delimiter ;
+
+mysql> update employee set salary=-5000 where empid=101;
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|   101 | vikrant | 50000.00 |
+|   102 | rahul   | 30000.00 |
+|   103 | sneha   | 70000.00 |
+|   108 | rahul   |     0.00 |
++-------+---------+----------+
+4 rows in set (0.00 sec)
+
+======================================================================================================
+
+3. After insert Trigger
+========================================================================================
+
+delimiter //
+
+create trigger after_insert_employee
+after insert on employee
+for each row
+begin
+insert into employee_audit(message)
+values(concat('new employee inserted : ',new.empname));
+end //
+
+delimiter ;
+
+mysql> insert into employee values (109,'sneha',60000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employee_audit;
++----+-------------------------------+
+| id | message                       |
++----+-------------------------------+
+|  1 | new employee inserted : sneha |
++----+-------------------------------+
+1 row in set (0.00 sec)
+
+
+======================================================================================================
+
+4. After update Trigger
+========================================================================================
+
+delimiter //
+
+create trigger after_update_employee
+after update on employee
+for each row
+begin
+insert into employee_audit(message)
+values(concat('salary updated for : ',new.empname));
+end //
+
+delimiter ;
+
+mysql> update employee set salary=70000 where empid=103;
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> select * from employee_audit;
++----+-------------------------------+
+| id | message                       |
++----+-------------------------------+
+|  1 | new employee inserted : sneha |
+|  2 | salary updated for : sneha    |
++----+-------------------------------+
+2 rows in set (0.00 sec)
+

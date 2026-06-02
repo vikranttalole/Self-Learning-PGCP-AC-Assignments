@@ -1,0 +1,148 @@
+Name:Vikrant Sanjay Talole
+PRN:260245920082
+
+2) Defining Data Types for Columns Creating, Altering, Dropping Constraints Aggregate Functions: SUM(), AVG(), COUNT(), MAX(), MIN(), COUNT(), Group By, Having Clause Using Like, Distinct, Order By, Between...And Comparing Nulls, Using IN/Not-In.
+======================================================================================================================
+mysql> create database employee;
+Query OK, 1 row affected (0.06 sec)
+
+mysql> use employee;
+Database changed
+mysql> create table employee (empid int primary key, empname varchar(50), department varchar(30), salary decimal(10,2));
+Query OK, 0 rows affected (0.13 sec)
+
+mysql> table employee;
+Empty set (0.02 sec)
+
+mysql> desc employee;
++------------+---------------+------+-----+---------+-------+
+| Field      | Type          | Null | Key | Default | Extra |
++------------+---------------+------+-----+---------+-------+
+| empid      | int           | NO   | PRI | NULL    |       |
+| empname    | varchar(50)   | YES  |     | NULL    |       |
+| department | varchar(30)   | YES  |     | NULL    |       |
+| salary     | decimal(10,2) | YES  |     | NULL    |       |
++------------+---------------+------+-----+---------+-------+
+4 rows in set (0.09 sec)
+
+mysql> insert into employee values (101,'vikrant','it',50000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee values (102,'rahul','hr',40000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee values (103,'sneha','it',60000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee values (104,'priya','finance',55000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into employee values (105,'amit','it',45000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> table employee;
++-------+---------+------------+----------+
+| empid | empname | department | salary   |
++-------+---------+------------+----------+
+|   101 | vikrant | it         | 50000.00 |
+|   102 | rahul   | hr         | 40000.00 |
+|   103 | sneha   | it         | 60000.00 |
+|   104 | priya   | finance    | 55000.00 |
+|   105 | amit    | it         | 45000.00 |
++-------+---------+------------+----------+
+5 rows in set (0.01 sec)
+
+mysql> select sum(salary) from employee;
++-------------+
+| sum(salary) |
++-------------+
+|   250000.00 |
++-------------+
+1 row in set (0.01 sec)
+
+mysql> select avg(salary) from employee;
++--------------+
+| avg(salary)  |
++--------------+
+| 50000.000000 |
++--------------+
+1 row in set (0.00 sec)
+
+mysql> select count(*) from employee;
++----------+
+| count(*) |
++----------+
+|        5 |
++----------+
+1 row in set (0.03 sec)
+
+mysql> select max(salary) from employee;
++-------------+
+| max(salary) |
++-------------+
+|    60000.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select min(salary) from employee;
++-------------+
+| min(salary) |
++-------------+
+|    40000.00 |
++-------------+
+1 row in set (0.00 sec)
+
+mysql> select department,sum(salary) from employee group by department;
++------------+-------------+
+| department | sum(salary) |
++------------+-------------+
+| it         |   155000.00 |
+| hr         |    40000.00 |
+| finance    |    55000.00 |
++------------+-------------+
+3 rows in set (0.01 sec)
+
+mysql> select department,avg(salary) from employee group by department;
++------------+--------------+
+| department | avg(salary)  |
++------------+--------------+
+| it         | 51666.666667 |
+| hr         | 40000.000000 |
+| finance    | 55000.000000 |
++------------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> select department,count(*) from employee group by department;
++------------+----------+
+| department | count(*) |
++------------+----------+
+| it         |        3 |
+| hr         |        1 |
+| finance    |        1 |
++------------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select department,sum(salary) from employee group by department having sum(salary)>100000;
++------------+-------------+
+| department | sum(salary) |
++------------+-------------+
+| it         |   155000.00 |
++------------+-------------+
+1 row in set (0.01 sec)
+
+mysql> select department,count(*) from employee group by department having count(*)>1;
++------------+----------+
+| department | count(*) |
++------------+----------+
+| it         |        3 |
++------------+----------+
+1 row in set (0.00 sec)
+
+mysql> select department,avg(salary) from employee group by department having avg(salary)>45000;
++------------+--------------+
+| department | avg(salary)  |
++------------+--------------+
+| it         | 51666.666667 |
+| finance    | 55000.000000 |
++------------+--------------+
+2 rows in set (0.00 sec)
