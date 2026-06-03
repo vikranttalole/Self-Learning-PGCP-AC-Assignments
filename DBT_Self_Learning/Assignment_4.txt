@@ -1,260 +1,210 @@
 Name:Vikrant Sanjay Talole
 PRN:260245920082
 
-Question: 4) Subqueries, Correlated Queries Using Exists/Not-Exists Using Commit/Rollback/Savepoint Granting/revoking privileges on database objects Creating Views, Querying using Views Creating Indexes Creating Temporary Tables.
+Question: 4) Use of flow control statement in Stored Procedure Use of conditional statements in Stored Procedure.
 ===========================================================================================================
-
-mysql> create table employee (empid int primary key, empname varchar(50), deptid int);
-ERROR 1050 (42S01): Table 'employee' already exists
-
-mysql> drop table employee;
-Query OK, 0 rows affected (0.04 sec)
-
-mysql> create table employee (empid int primary key, empname varchar(50), deptid int);
+mysql> create table employee (empid int primary key, empname varchar(50), salary decimal(10,2));
 Query OK, 0 rows affected (0.03 sec)
 
-mysql> create table department (deptid int primary key, deptname varchar(50));
-Query OK, 0 rows affected (0.04 sec)
-
-mysql> insert into employee values (101,'vikrant',1);
+mysql> insert into employee values (101,'vikrant',50000);
 Query OK, 1 row affected (0.01 sec)
 
-mysql> insert into employee values (102,'rahul',2);
+mysql> insert into employee values (102,'rahul',30000);
 Query OK, 1 row affected (0.01 sec)
 
-mysql> insert into employee values (103,'sneha',1);
-Query OK, 1 row affected (0.01 sec)
-
-mysql> insert into employee values (104,'priya',3);
+mysql> insert into employee values (103,'sneha',70000);
 Query OK, 1 row affected (0.01 sec)
 
 mysql> table employee;
-+-------+---------+--------+
-| empid | empname | deptid |
-+-------+---------+--------+
-|   101 | vikrant |      1 |
-|   102 | rahul   |      2 |
-|   103 | sneha   |      1 |
-|   104 | priya   |      3 |
-+-------+---------+--------+
-4 rows in set (0.00 sec)
-
-mysql> insert into department values (1,'it');
-Query OK, 1 row affected (0.01 sec)
-
-mysql> insert into department values (2,'hr');
-Query OK, 1 row affected (0.01 sec)
-
-mysql> insert into department values (4,'finance');
-Query OK, 1 row affected (0.01 sec)
-
-mysql> table department;
-+--------+----------+
-| deptid | deptname |
-+--------+----------+
-|      1 | it       |
-|      2 | hr       |
-|      4 | finance  |
-+--------+----------+
-3 rows in set (0.00 sec)
-
-mysql> select empname from employee union select deptname from department;
-+---------+
-| empname |
-+---------+
-| vikrant |
-| rahul   |
-| sneha   |
-| priya   |
-| it      |
-| hr      |
-| finance |
-+---------+
-7 rows in set (0.01 sec)
-
-mysql> select empname from employee union all select deptname from department;
-+---------+
-| empname |
-+---------+
-| vikrant |
-| rahul   |
-| sneha   |
-| priya   |
-| it      |
-| hr      |
-| finance |
-+---------+
-7 rows in set (0.00 sec)
-
-mysql> select e.empid,e.empname,d.deptname from employee e inner join department d on e.deptid=d.deptid;
-+-------+---------+----------+
-| empid | empname | deptname |
-+-------+---------+----------+
-|   101 | vikrant | it       |
-|   102 | rahul   | hr       |
-|   103 | sneha   | it       |
-+-------+---------+----------+
-3 rows in set (0.01 sec)
-
-mysql> select e.empid,e.empname,d.deptname from employee e left join department d on e.deptid=d.deptid;
-+-------+---------+----------+
-| empid | empname | deptname |
-+-------+---------+----------+
-|   101 | vikrant | it       |
-|   102 | rahul   | hr       |
-|   103 | sneha   | it       |
-|   104 | priya   | NULL     |
-+-------+---------+----------+
-4 rows in set (0.00 sec)
-
-mysql> select e.empid,e.empname,d.deptname from employee e right join department d on e.deptid=d.deptid;
-+-------+---------+----------+
-| empid | empname | deptname |
-+-------+---------+----------+
-|   103 | sneha   | it       |
-|   101 | vikrant | it       |
-|   102 | rahul   | hr       |
-|  NULL | NULL    | finance  |
-+-------+---------+----------+
-4 rows in set (0.00 sec)
-
-mysql> select e.empid,e.empname,d.deptname from employee e left join department d on e.deptid=d.deptid union select e.empid,e.empname,d.deptname from employee e right join department d on e.deptid=d.deptid;
-+-------+---------+----------+
-| empid | empname | deptname |
-+-------+---------+----------+
-|   101 | vikrant | it       |
-|   102 | rahul   | hr       |
-|   103 | sneha   | it       |
-|   104 | priya   | NULL     |
-|  NULL | NULL    | finance  |
-+-------+---------+----------+
-5 rows in set (0.00 sec)
-
-mysql> select e.empname,d.deptname from employee e cross join department d;
-+---------+----------+
-| empname | deptname |
-+---------+----------+
-| vikrant | finance  |
-| vikrant | hr       |
-| vikrant | it       |
-| rahul   | finance  |
-| rahul   | hr       |
-| rahul   | it       |
-| sneha   | finance  |
-| sneha   | hr       |
-| sneha   | it       |
-| priya   | finance  |
-| priya   | hr       |
-| priya   | it       |
-+---------+----------+
-12 rows in set (0.00 sec)
-
-mysql> select e.empid,e.empname,d.deptname from employee e,department d where e.deptid=d.deptid;
-+-------+---------+----------+
-| empid | empname | deptname |
-+-------+---------+----------+
-|   101 | vikrant | it       |
-|   102 | rahul   | hr       |
-|   103 | sneha   | it       |
-+-------+---------+----------+
-3 rows in set (0.00 sec)
-
-mysql> create table staff (id int primary key,name varchar(50),managerid int);
-Query OK, 0 rows affected (0.03 sec)
-
-mysql> insert into staff values (1,'vikrant',null);
-Query OK, 1 row affected (0.01 sec)
-
-mysql> insert into staff values (2,'rahul',1);
-Query OK, 1 row affected (0.00 sec)
-
-mysql> insert into staff values (3,'sneha',1);
-Query OK, 1 row affected (0.01 sec)
-
-
-mysql> table staff;
-+----+---------+-----------+
-| id | name    | managerid |
-+----+---------+-----------+
-|  1 | vikrant |      NULL |
-|  2 | rahul   |         1 |
-|  3 | sneha   |         1 |
-+----+---------+-----------+
-3 rows in set (0.00 sec)
-
-mysql> select s1.name as employee,s2.name as manager from staff s1 left join staff s2 on s1.managerid=s2.id;
-+----------+---------+
-| employee | manager |
-+----------+---------+
-| vikrant  | NULL    |
-| rahul    | vikrant |
-| sneha    | vikrant |
-+----------+---------+
-3 rows in set (0.00 sec)
-
-mysql> create table employee_structure as select * from employee where 1=0;
-Query OK, 0 rows affected (0.04 sec)
-Records: 0  Duplicates: 0  Warnings: 0
-
-mysql> select * from employee_structure;
-Empty set (0.00 sec)
-
-mysql> create table employee_backup as select * from employee;
-Query OK, 3 rows affected (0.03 sec)
-Records: 3  Duplicates: 0  Warnings: 0
-
-mysql> select * from employee_backup;
 +-------+---------+----------+
 | empid | empname | salary   |
 +-------+---------+----------+
-|     1 | vikrant | 50000.00 |
-|     2 | rahul   | 45000.00 |
-|     3 | sneha   | 55000.00 |
+|   101 | vikrant | 50000.00 |
+|   102 | rahul   | 30000.00 |
+|   103 | sneha   | 70000.00 |
 +-------+---------+----------+
 3 rows in set (0.00 sec)
+=================================================================================================
+1. if statement in stored procedure
 
-mysql> insert into employee_structure select * from employee;
-Query OK, 3 rows affected (0.01 sec)
-Records: 3  Duplicates: 0  Warnings: 0
+====================================================================================================
+delimiter //
 
-mysql> select * from employee_structure;
-+-------+---------+----------+
-| empid | empname | salary   |
-+-------+---------+----------+
-|     1 | vikrant | 50000.00 |
-|     2 | rahul   | 45000.00 |
-|     3 | sneha   | 55000.00 |
-+-------+---------+----------+
-3 rows in set (0.00 sec)
+create procedure checksalary(in esalary decimal(10,2))
+begin
+if esalary>=50000 then
+select 'high salary' as result;
+end if;
+end //
 
-mysql> create table employee_new like employee;
-Query OK, 0 rows affected (0.03 sec)
+delimiter ;
 
-mysql> select * from employee_new;
-Empty set (0.01 sec)
+mysql> call checksalary(60000);
++-------------+
+| result      |
++-------------+
+| high salary |
++-------------+
+1 row in set (0.01 sec)
+============================================================================================
+2. if else statement
+=========================================================================================
+delimiter //
 
-mysql> insert into employee_new select * from employee where salary>50000;
-Query OK, 1 row affected (0.01 sec)
-Records: 1  Duplicates: 0  Warnings: 0
+create procedure salarystatus(in esalary decimal(10,2))
+begin
+if esalary>=50000 then
+select 'high salary' as result;
+else
+select 'low salary' as result;
+end if;
+end //
 
-mysql> select * from employee_new;
-+-------+---------+----------+
-| empid | empname | salary   |
-+-------+---------+----------+
-|     3 | sneha   | 55000.00 |
-+-------+---------+----------+
+delimiter ;
+
+mysql> call salarystatus(30000);
++------------+
+| result     |
++------------+
+| low salary |
++------------+
 1 row in set (0.00 sec)
 
-mysql> insert into employee (empname,salary) values ('amit',60000);
-Query OK, 1 row affected (0.01 sec)
+=============================================================================================
 
-mysql> select * from employee;
-+-------+---------+----------+
-| empid | empname | salary   |
-+-------+---------+----------+
-|     1 | vikrant | 50000.00 |
-|     2 | rahul   | 45000.00 |
-|     3 | sneha   | 55000.00 |
-|     4 | amit    | 60000.00 |
-+-------+---------+----------+
-4 rows in set (0.00 sec)
+3. case statement
+================================================================================================
+
+delimiter //
+
+create procedure departmentname(in did int)
+begin
+case did
+when 1 then select 'it';
+when 2 then select 'hr';
+when 3 then select 'finance';
+else select 'unknown';
+end case;
+end //
+
+delimiter ;
+
+mysql> call departmentname(2);
++----+
+| hr |
++----+
+| hr |
++----+
+1 row in set (0.00 sec)
+================================================================================================
+4. loop statement
+=============================================================================================
+
+delimiter //
+
+create procedure printnumbers()
+begin
+declare i int default 1;
+loop_label: loop
+select i;
+set i=i+1;
+if i>5 then
+leave loop_label;
+end if;
+end loop;
+end //
+
+delimiter ;
+
+mysql> call printnumbers();
++------+
+| i    |
++------+
+|    1 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| i    |
++------+
+|    2 |
++------+
+1 row in set (0.01 sec)
+
++------+
+| i    |
++------+
+|    3 |
++------+
+1 row in set (0.01 sec)
+
++------+
+| i    |
++------+
+|    4 |
++------+
+1 row in set (0.01 sec)
+
++------+
+| i    |
++------+
+|    5 |
++------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)
+
+==============================================================================================
+5. while loop
+============================================================================
+
+
+delimiter //
+
+create procedure whiledemo()
+begin
+declare i int default 1;
+while i<=5 do
+select i;
+set i=i+1;
+end while;
+end //
+
+delimiter ;
+mysql> call whiledemo();
++------+
+| i    |
++------+
+|    1 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| i    |
++------+
+|    2 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| i    |
++------+
+|    3 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| i    |
++------+
+|    4 |
++------+
+1 row in set (0.00 sec)
+
++------+
+| i    |
++------+
+|    5 |
++------+
+1 row in set (0.01 sec)
+
+Query OK, 0 rows affected (0.01 sec)

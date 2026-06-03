@@ -1,144 +1,125 @@
 Name:Vikrant Sanjay Talole
 PRN:260245920082
 
-Question: 3) Union/Union ALL Queries on Various type of Joins using OLD and SQL Standard Syntax Copying table structure, Copying data from one table to another Using AUTO_INCREMENT.
+Question: 3) Subqueries, Correlated Queries Using Exists/Not-Exists Using Commit/Rollback/Savepoint Granting/revoking privileges on database objects Creating Views, Querying using Views Creating Indexes Creating Temporary Tables.
 ===========================================================================================================
+mysql> use assign;
+Database changed
+mysql> select * from employee where salary>(select avg(salary) from employee);
++-------+---------+------------+--------+
+| empid | empname | department | salary |
++-------+---------+------------+--------+
+|   103 | priya   | it         |  60000 |
+|   104 | sneha   | finance    |  55000 |
++-------+---------+------------+--------+
+2 rows in set (0.01 sec)
 
-
-mysql> create table student (sid int primary key, sname varchar(50), city varchar(30), marks int, email varchar(100));
-Query OK, 0 rows affected (0.05 sec)
-
-mysql> insert into student values (1,'vikrant','pune',85,'vikrant@gmail.com');
-Query OK, 1 row affected (0.01 sec)
-
-mysql> insert into student values (2,'rahul','mumbai',75,null);
-Query OK, 1 row affected (0.01 sec)
-
-mysql> insert into student values (3,'sneha','pune',90,'sneha@gmail.com');
-Query OK, 1 row affected (0.01 sec)
-
-mysql> insert into student values (4,'priya','nashik',65,null);
-Query OK, 1 row affected (0.01 sec)
-
-mysql> insert into student values (5,'amit','mumbai',80,'amit@gmail.com');
-Query OK, 1 row affected (0.01 sec)
-
-mysql> select * from student where sname like 'v%';
-+-----+---------+------+-------+-------------------+
-| sid | sname   | city | marks | email             |
-+-----+---------+------+-------+-------------------+
-|   1 | vikrant | pune |    85 | vikrant@gmail.com |
-+-----+---------+------+-------+-------------------+
-1 row in set (0.01 sec)
-
-mysql> select * from student where sname like '%a';
-+-----+-------+--------+-------+-----------------+
-| sid | sname | city   | marks | email           |
-+-----+-------+--------+-------+-----------------+
-|   3 | sneha | pune   |    90 | sneha@gmail.com |
-|   4 | priya | nashik |    65 | NULL            |
-+-----+-------+--------+-------+-----------------+
-2 rows in set (0.00 sec)
-
-mysql> select * from student where sname like '%h%';
-+-----+-------+--------+-------+-----------------+
-| sid | sname | city   | marks | email           |
-+-----+-------+--------+-------+-----------------+
-|   2 | rahul | mumbai |    75 | NULL            |
-|   3 | sneha | pune   |    90 | sneha@gmail.com |
-+-----+-------+--------+-------+-----------------+
-2 rows in set (0.00 sec)
-
-mysql> select distinct city from student;
-+--------+
-| city   |
-+--------+
-| pune   |
-| mumbai |
-| nashik |
-+--------+
-3 rows in set (0.01 sec)
-
-mysql> select * from student order by marks;
-+-----+---------+--------+-------+-------------------+
-| sid | sname   | city   | marks | email             |
-+-----+---------+--------+-------+-------------------+
-|   4 | priya   | nashik |    65 | NULL              |
-|   2 | rahul   | mumbai |    75 | NULL              |
-|   5 | amit    | mumbai |    80 | amit@gmail.com    |
-|   1 | vikrant | pune   |    85 | vikrant@gmail.com |
-|   3 | sneha   | pune   |    90 | sneha@gmail.com   |
-+-----+---------+--------+-------+-------------------+
-5 rows in set (0.00 sec)
-
-mysql> select * from student order by marks desc;
-+-----+---------+--------+-------+-------------------+
-| sid | sname   | city   | marks | email             |
-+-----+---------+--------+-------+-------------------+
-|   3 | sneha   | pune   |    90 | sneha@gmail.com   |
-|   1 | vikrant | pune   |    85 | vikrant@gmail.com |
-|   5 | amit    | mumbai |    80 | amit@gmail.com    |
-|   2 | rahul   | mumbai |    75 | NULL              |
-|   4 | priya   | nashik |    65 | NULL              |
-+-----+---------+--------+-------+-------------------+
-5 rows in set (0.00 sec)
-
-mysql> select * from student where marks between 70 and 90;
-+-----+---------+--------+-------+-------------------+
-| sid | sname   | city   | marks | email             |
-+-----+---------+--------+-------+-------------------+
-|   1 | vikrant | pune   |    85 | vikrant@gmail.com |
-|   2 | rahul   | mumbai |    75 | NULL              |
-|   3 | sneha   | pune   |    90 | sneha@gmail.com   |
-|   5 | amit    | mumbai |    80 | amit@gmail.com    |
-+-----+---------+--------+-------+-------------------+
-4 rows in set (0.00 sec)
-
-mysql> select * from student where email is null;
-+-----+-------+--------+-------+-------+
-| sid | sname | city   | marks | email |
-+-----+-------+--------+-------+-------+
-|   2 | rahul | mumbai |    75 | NULL  |
-|   4 | priya | nashik |    65 | NULL  |
-+-----+-------+--------+-------+-------+
-2 rows in set (0.00 sec)
-
-mysql> select * from student where email is not null;
-+-----+---------+--------+-------+-------------------+
-| sid | sname   | city   | marks | email             |
-+-----+---------+--------+-------+-------------------+
-|   1 | vikrant | pune   |    85 | vikrant@gmail.com |
-|   3 | sneha   | pune   |    90 | sneha@gmail.com   |
-|   5 | amit    | mumbai |    80 | amit@gmail.com    |
-+-----+---------+--------+-------+-------------------+
+mysql> select * from employee e1 where salary=(select max(salary) from employee e2 where e1.department=e2.department);
++-------+---------+------------+--------+
+| empid | empname | department | salary |
++-------+---------+------------+--------+
+|   102 | rahul   | hr         |  45000 |
+|   103 | priya   | it         |  60000 |
+|   104 | sneha   | finance    |  55000 |
++-------+---------+------------+--------+
 3 rows in set (0.00 sec)
 
-mysql> select * from student where city in ('pune','mumbai');
-+-----+---------+--------+-------+-------------------+
-| sid | sname   | city   | marks | email             |
-+-----+---------+--------+-------+-------------------+
-|   1 | vikrant | pune   |    85 | vikrant@gmail.com |
-|   2 | rahul   | mumbai |    75 | NULL              |
-|   3 | sneha   | pune   |    90 | sneha@gmail.com   |
-|   5 | amit    | mumbai |    80 | amit@gmail.com    |
-+-----+---------+--------+-------+-------------------+
-4 rows in set (0.00 sec)
+mysql> create table department(deptid int,deptname varchar(30));
+Query OK, 0 rows affected (0.04 sec)
 
-mysql> select * from student where city not in ('pune','mumbai');
-+-----+-------+--------+-------+-------+
-| sid | sname | city   | marks | email |
-+-----+-------+--------+-------+-------+
-|   4 | priya | nashik |    65 | NULL  |
-+-----+-------+--------+-------+-------+
+mysql> insert into department values(1,'it'),(2,'hr'),(3,'finance');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from department d where exists(select * from employee e where e.department=d.deptname);
++--------+----------+
+| deptid | deptname |
++--------+----------+
+|      1 | it       |
+|      2 | hr       |
+|      3 | finance  |
++--------+----------+
+3 rows in set (0.01 sec)
+
+mysql> select * from department d where not exists(select * from employee e where e.department=d.deptname);
+Empty set (0.00 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into employee values(105,'amit','it',40000);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into employee values(105,'amit','it',40000);
+ERROR 1062 (23000): Duplicate entry '105' for key 'employee.PRIMARY'
+mysql> commit;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select * from employee where empid=105;
++-------+---------+------------+--------+
+| empid | empname | department | salary |
++-------+---------+------------+--------+
+|   105 | amit    | it         |  40000 |
++-------+---------+------------+--------+
 1 row in set (0.00 sec)
 
-mysql> select * from student where city in ('pune','mumbai') and marks between 70 and 90 order by marks desc;
-+-----+---------+--------+-------+-------------------+
-| sid | sname   | city   | marks | email             |
-+-----+---------+--------+-------+-------------------+
-|   3 | sneha   | pune   |    90 | sneha@gmail.com   |
-|   1 | vikrant | pune   |    85 | vikrant@gmail.com |
-|   5 | amit    | mumbai |    80 | amit@gmail.com    |
-|   2 | rahul   | mumbai |    75 | NULL              |
-+-----+---------+--------+-------+-------------------+
-4 rows in set (0.00 sec)
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from employee where empid=105;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> rollback;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> select * from employee where empid=105;
++-------+---------+------------+--------+
+| empid | empname | department | salary |
++-------+---------+------------+--------+
+|   105 | amit    | it         |  40000 |
++-------+---------+------------+--------+
+1 row in set (0.00 sec)
+
+mysql> start transaction;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> insert into employee values(106,'neha','hr',35000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> savepoint sp1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> delete from employee where empid=106;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> rollback to sp1;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> commit;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create view it_employees as select empid,empname,salary from employee where department='it';
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from it_employees;
++-------+---------+--------+
+| empid | empname | salary |
++-------+---------+--------+
+|   101 | vikrant |  50000 |
+|   103 | priya   |  60000 |
+|   105 | amit    |  40000 |
++-------+---------+--------+
+3 rows in set (0.01 sec)
+
+mysql> create index idx_empname on employee(empname);
+Query OK, 0 rows affected (0.13 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> show index from employee;
++----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table    | Non_unique | Key_name    | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| employee |          0 | PRIMARY     |            1 | empid       | A         |           5 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+| employee |          1 | idx_empname |            1 | empname     | A         |           5 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
++----------+------------+-------------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+2 rows

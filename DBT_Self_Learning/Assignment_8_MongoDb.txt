@@ -1,0 +1,719 @@
+Name:Vikrant Sanjay Talole
+PRN:260245920082
+
+Question: 8) Using MongoDB Shell and Compass Creating database, Connecting to a database, Creating Collections Performing CRUD operations MongoDB:Complex Read Using Operators, Sorting Operations, Creating Indexes. 
+===========================================================================================================
+C:\Users\91983>mongosh
+Current Mongosh Log ID: 6a1ffdd0a72ecfc84babc113
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.8.3
+Using MongoDB:          8.3.2
+Using Mongosh:          2.8.3
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+
+To help improve our products, anonymous usage data is collected and sent to MongoDB periodically (https://www.mongodb.com/legal/privacy-policy).
+You can opt-out by running the disableTelemetry() command.
+
+------
+   The server generated these startup warnings when booting
+   2026-06-03T15:30:19.113+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> use companydb
+switched to db companydb
+companydb> db
+companydb
+companydb> db.createCollection("employees")
+{ ok: 1 }
+companydb> show collections
+employees
+companydb> db.employees.insertMany([
+| {
+|  empId:101,
+|  name:"Vikrant",
+|  age:23,
+|  department:"IT",
+|  salary:50000,
+|  city:"Pune"
+| },
+| {
+|  empId:102,
+|  name:"Rahul",
+|  age:25,
+|  department:"HR",
+|  salary:45000,
+|  city:"Mumbai"
+| }
+| ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a1ffe0ca72ecfc84babc114'),
+    '1': ObjectId('6a1ffe0ca72ecfc84babc115')
+  }
+}
+companydb> db.employees.find()
+[
+  {
+    _id: ObjectId('6a1ffe0ca72ecfc84babc114'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune'
+  },
+  {
+    _id: ObjectId('6a1ffe0ca72ecfc84babc115'),
+    empId: 102,
+    name: 'Rahul',
+    age: 25,
+    department: 'HR',
+    salary: 45000,
+    city: 'Mumbai'
+  }
+]
+companydb> db.employees.insertMany([
+| {
+|  empId:101,
+|  name:"Vikrant",
+|  age:23,
+|  department:"IT",
+|  salary:50000,
+|  city:"Pune"
+| },
+| {
+|  empId:102,
+|  name:"Rahul",
+|  age:25,
+|  department:"HR",
+|  salary:45000,
+|  city:"Mumbai"
+| },
+| {
+|  empId:103,
+|  name:"Priya",
+|  age:24,
+|  department:"IT",
+|  salary:60000,
+|  city:"Nashik"
+| },
+| {
+|  empId:104,
+|  name:"Sneha",
+|  age:26,
+|  department:"Finance",
+|  salary:55000,
+|  city:"Pune"
+| }
+| ])
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId('6a1ffe43a72ecfc84babc116'),
+    '1': ObjectId('6a1ffe43a72ecfc84babc117'),
+    '2': ObjectId('6a1ffe43a72ecfc84babc118'),
+    '3': ObjectId('6a1ffe43a72ecfc84babc119')
+  }
+}
+companydb> db.employees.find()
+[
+  {
+    _id: ObjectId('6a1ffe0ca72ecfc84babc114'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune'
+  },
+  {
+    _id: ObjectId('6a1ffe0ca72ecfc84babc115'),
+    empId: 102,
+    name: 'Rahul',
+    age: 25,
+    department: 'HR',
+    salary: 45000,
+    city: 'Mumbai'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc116'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc117'),
+    empId: 102,
+    name: 'Rahul',
+    age: 25,
+    department: 'HR',
+    salary: 45000,
+    city: 'Mumbai'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc119'),
+    empId: 104,
+    name: 'Sneha',
+    age: 26,
+    department: 'Finance',
+    salary: 55000,
+    city: 'Pune'
+  }
+]
+companydb> db.employees.findOne({empId:101})
+{
+  _id: ObjectId('6a1ffe0ca72ecfc84babc114'),
+  empId: 101,
+  name: 'Vikrant',
+  age: 23,
+  department: 'IT',
+  salary: 50000,
+  city: 'Pune'
+}
+companydb> db.employees.updateOne(
+|  {empId:101},
+|  {$set:{salary:55000}}
+| )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 1,
+  modifiedCount: 1,
+  upsertedCount: 0
+}
+companydb> db.employees.find({empId:101})
+[
+  {
+    _id: ObjectId('6a1ffe0ca72ecfc84babc114'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 55000,
+    city: 'Pune'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc116'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune'
+  }
+]
+companydb> db.employees.deleteOne({empId:104})
+{ acknowledged: true, deletedCount: 1 }
+companydb> db.employees.find()
+[
+  {
+    _id: ObjectId('6a1ffe0ca72ecfc84babc114'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 55000,
+    city: 'Pune'
+  },
+  {
+    _id: ObjectId('6a1ffe0ca72ecfc84babc115'),
+    empId: 102,
+    name: 'Rahul',
+    age: 25,
+    department: 'HR',
+    salary: 45000,
+    city: 'Mumbai'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc116'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc117'),
+    empId: 102,
+    name: 'Rahul',
+    age: 25,
+    department: 'HR',
+    salary: 45000,
+    city: 'Mumbai'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  }
+]
+companydb> db.employees.deleteOne({empId:101})
+{ acknowledged: true, deletedCount: 1 }
+companydb> db.employees.find()
+[
+  {
+    _id: ObjectId('6a1ffe0ca72ecfc84babc115'),
+    empId: 102,
+    name: 'Rahul',
+    age: 25,
+    department: 'HR',
+    salary: 45000,
+    city: 'Mumbai'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc116'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc117'),
+    empId: 102,
+    name: 'Rahul',
+    age: 25,
+    department: 'HR',
+    salary: 45000,
+    city: 'Mumbai'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  }
+]
+companydb> db.employees.deleteOne({empId:102})
+{ acknowledged: true, deletedCount: 1 }
+companydb> db.employees.find()
+[
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc116'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc117'),
+    empId: 102,
+    name: 'Rahul',
+    age: 25,
+    department: 'HR',
+    salary: 45000,
+    city: 'Mumbai'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  }
+]
+companydb> db.employees.insertOne({
+|  empId:105,
+|  name:"Amit",
+|  age:22,
+|  department:"IT",
+|  salary:40000,
+|  city:"Pune"
+| })
+{
+  acknowledged: true,
+  insertedId: ObjectId('6a1fff41a72ecfc84babc11a')
+}
+companydb> db.employees.find({empId:105})
+[
+  {
+    _id: ObjectId('6a1fff41a72ecfc84babc11a'),
+    empId: 105,
+    name: 'Amit',
+    age: 22,
+    department: 'IT',
+    salary: 40000,
+    city: 'Pune'
+  }
+]
+companydb> db.employees.updateMany(
+|  {city:"Pune"},
+|  {$set:{state:"Maharashtra"}}
+| )
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 2,
+  modifiedCount: 2,
+  upsertedCount: 0
+}
+companydb> db.employees.find({city:"Pune"})
+[
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc116'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  },
+  {
+    _id: ObjectId('6a1fff41a72ecfc84babc11a'),
+    empId: 105,
+    name: 'Amit',
+    age: 22,
+    department: 'IT',
+    salary: 40000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  }
+]
+companydb> db.employees.deleteOne({empId:104})
+{ acknowledged: true, deletedCount: 0 }
+companydb> db.employees.find()
+[
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc116'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc117'),
+    empId: 102,
+    name: 'Rahul',
+    age: 25,
+    department: 'HR',
+    salary: 45000,
+    city: 'Mumbai'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  },
+  {
+    _id: ObjectId('6a1fff41a72ecfc84babc11a'),
+    empId: 105,
+    name: 'Amit',
+    age: 22,
+    department: 'IT',
+    salary: 40000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  }
+]
+companydb> db.employees.find({salary:{$gt:50000}})
+[
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  }
+]
+companydb> db.employees.find({age:{$lt:25}})
+[
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc116'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  },
+  {
+    _id: ObjectId('6a1fff41a72ecfc84babc11a'),
+    empId: 105,
+    name: 'Amit',
+    age: 22,
+    department: 'IT',
+    salary: 40000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  }
+]
+companydb> db.employees.find({city:{$ne:"Mumbai"}})
+[
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc116'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  },
+  {
+    _id: ObjectId('6a1fff41a72ecfc84babc11a'),
+    empId: 105,
+    name: 'Amit',
+    age: 22,
+    department: 'IT',
+    salary: 40000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  }
+]
+companydb> db.employees.find({
+|  city:{
+|   $in:["Pune","Nashik"]
+|  }
+| })
+[
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc116'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  },
+  {
+    _id: ObjectId('6a1fff41a72ecfc84babc11a'),
+    empId: 105,
+    name: 'Amit',
+    age: 22,
+    department: 'IT',
+    salary: 40000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  }
+]
+companydb> db.employees.find({
+|  $and:[
+|   {department:"IT"},
+|   {salary:{$gt:50000}}
+|  ]
+| })
+[
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  }
+]
+companydb> db.employees.find({
+|  $or:[
+|   {city:"Mumbai"},
+|   {city:"Nashik"}
+|  ]
+| })
+[
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc117'),
+    empId: 102,
+    name: 'Rahul',
+    age: 25,
+    department: 'HR',
+    salary: 45000,
+    city: 'Mumbai'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  }
+]
+companydb> db.employees.find().sort({salary:1})
+[
+  {
+    _id: ObjectId('6a1fff41a72ecfc84babc11a'),
+    empId: 105,
+    name: 'Amit',
+    age: 22,
+    department: 'IT',
+    salary: 40000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc117'),
+    empId: 102,
+    name: 'Rahul',
+    age: 25,
+    department: 'HR',
+    salary: 45000,
+    city: 'Mumbai'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc116'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  }
+]
+companydb> db.employees.find().sort({salary:1000})
+MongoInvalidArgumentError: Invalid sort direction: 1000
+companydb> db.employees.find().sort({salary:-1})
+[
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc116'),
+    empId: 101,
+    name: 'Vikrant',
+    age: 23,
+    department: 'IT',
+    salary: 50000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  },
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc117'),
+    empId: 102,
+    name: 'Rahul',
+    age: 25,
+    department: 'HR',
+    salary: 45000,
+    city: 'Mumbai'
+  },
+  {
+    _id: ObjectId('6a1fff41a72ecfc84babc11a'),
+    empId: 105,
+    name: 'Amit',
+    age: 22,
+    department: 'IT',
+    salary: 40000,
+    city: 'Pune',
+    state: 'Maharashtra'
+  }
+]
+companydb> db.employees.find()
+| .sort({salary:-1})
+| .limit(1)
+[
+  {
+    _id: ObjectId('6a1ffe43a72ecfc84babc118'),
+    empId: 103,
+    name: 'Priya',
+    age: 24,
+    department: 'IT',
+    salary: 60000,
+    city: 'Nashik'
+  }
+]
+companydb> db.employees.createIndex({empId:1})
+empId_1
+companydb> db.employees.createIndex({
+|  department:1,
+|  salary:-1
+| })
+department_1_salary_-1
+companydb> db.employees.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { empId: 1 }, name: 'empId_1' },
+  {
+    v: 2,
+    key: { department: 1, salary: -1 },
+    name: 'department_1_salary_-1'
+  }
+]
+companydb> db.employees.countDocuments()
+4
+companydb> db.employees.drop()
+true
+companydb> db.dropDatabase()
+{ ok: 1, dropped: 'companydb' }
+companydb>

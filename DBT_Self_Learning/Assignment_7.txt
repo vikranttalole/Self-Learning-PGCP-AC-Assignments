@@ -1,126 +1,98 @@
 Name:Vikrant Sanjay Talole
 PRN:260245920082
 
-Question: 6) Create Before Triggers Create After Triggers.
+Question: 7) Exception handling in Stored Procedure Exception handling with various handler actions
 ===========================================================================================================
-1. Before Insert Trigger
-========================================================================================
+1. continue handler
+=========================================================================================
+
 delimiter //
 
-create trigger before_insert_employee
-before insert on employee
-for each row
+create procedure continuehandlerdemo()
 begin
-if new.salary < 0 then
-set new.salary = 0;
-end if;
+declare continue handler for sqlexception
+select 'error occurred but execution continued';
+
+insert into employee values (101,'rahul',40000);
+
+select 'procedure completed';
 end //
 
 delimiter ;
 
-mysql> insert into employee values (108,'rahul',-10000);
-Query OK, 1 row affected (0.01 sec)
-
-mysql> select * from employee;
-+-------+---------+----------+
-| empid | empname | salary   |
-+-------+---------+----------+
-|   101 | vikrant | 50000.00 |
-|   102 | rahul   | 30000.00 |
-|   103 | sneha   | 70000.00 |
-|   108 | rahul   |     0.00 |
-+-------+---------+----------+
-4 rows in set (0.00 sec)
-
-======================================================================================================
-
-2. Before Update Trigger
-========================================================================================
-
-delimiter //
-
-create trigger before_update_employee
-before update on employee
-for each row
-begin
-if new.salary < 0 then
-set new.salary = old.salary;
-end if;
-end //
-
-delimiter ;
-
-mysql> update employee set salary=-5000 where empid=101;
-Query OK, 0 rows affected (0.01 sec)
-Rows matched: 1  Changed: 0  Warnings: 0
-
-mysql> select * from employee;
-+-------+---------+----------+
-| empid | empname | salary   |
-+-------+---------+----------+
-|   101 | vikrant | 50000.00 |
-|   102 | rahul   | 30000.00 |
-|   103 | sneha   | 70000.00 |
-|   108 | rahul   |     0.00 |
-+-------+---------+----------+
-4 rows in set (0.00 sec)
-
-======================================================================================================
-
-3. After insert Trigger
-========================================================================================
-
-delimiter //
-
-create trigger after_insert_employee
-after insert on employee
-for each row
-begin
-insert into employee_audit(message)
-values(concat('new employee inserted : ',new.empname));
-end //
-
-delimiter ;
-
-mysql> insert into employee values (109,'sneha',60000);
-Query OK, 1 row affected (0.01 sec)
-
-mysql> select * from employee_audit;
-+----+-------------------------------+
-| id | message                       |
-+----+-------------------------------+
-|  1 | new employee inserted : sneha |
-+----+-------------------------------+
+mysql> call continuehandlerdemo();
++----------------------------------------+
+| error occurred but execution continued |
++----------------------------------------+
+| error occurred but execution continued |
++----------------------------------------+
 1 row in set (0.00 sec)
 
++---------------------+
+| procedure completed |
++---------------------+
+| procedure completed |
++---------------------+
+1 row in set (0.01 sec)
 
-======================================================================================================
-
-4. After update Trigger
-========================================================================================
+Query OK, 0 rows affected (0.01 sec)
+====================================================================================
+2. exit handler
+=========================================================================================
 
 delimiter //
 
-create trigger after_update_employee
-after update on employee
-for each row
+create procedure exithandlerdemo()
 begin
-insert into employee_audit(message)
-values(concat('salary updated for : ',new.empname));
+declare exit handler for sqlexception
+select 'error occurred and procedure terminated';
+
+insert into employee values (101,'sneha',60000);
+
+select 'procedure completed';
+end //
+
+delimiter ;
+mysql> call exithandlerdemo();
++-----------------------------------------+
+| error occurred and procedure terminated |
++-----------------------------------------+
+| error occurred and procedure terminated |
++-----------------------------------------+
+1 row in set (0.00 sec)
+
+=========================================================================================
+3. not found handler
+=========================================================================================
+delimiter //
+
+create procedure notfounddemo()
+begin
+declare v_name varchar(50);
+
+declare continue handler for not found
+select 'record not found';
+
+select empname into v_name from employee where empid=999;
+
+select v_name;
 end //
 
 delimiter ;
 
-mysql> update employee set salary=70000 where empid=103;
+mysql> call notfounddemo();
++------------------+
+| record not found |
++------------------+
+| record not found |
++------------------+
+1 row in set (0.01 sec)
+
++--------+
+| v_name |
++--------+
+| NULL   |
++--------+
+1 row in set (0.01 sec)
+
 Query OK, 0 rows affected (0.01 sec)
-Rows matched: 1  Changed: 0  Warnings: 0
-
-mysql> select * from employee_audit;
-+----+-------------------------------+
-| id | message                       |
-+----+-------------------------------+
-|  1 | new employee inserted : sneha |
-|  2 | salary updated for : sneha    |
-+----+-------------------------------+
-2 rows in set (0.00 sec)
-

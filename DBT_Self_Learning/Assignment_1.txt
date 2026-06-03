@@ -1,7 +1,7 @@
 Name:Vikrant Sanjay Talole
 PRN:260245920082
 
-Question: 1 Performing basic CREATE, ALTER, DROP Commands
+Question: 1)Performing basic CREATE, ALTER, DROP Commands
 =======================================================================================================
 
 mysql> CREATE DATABASE CompanyDB;

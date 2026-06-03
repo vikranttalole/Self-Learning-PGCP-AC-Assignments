@@ -1,130 +1,126 @@
 Name:Vikrant Sanjay Talole
 PRN:260245920082
 
-Question: 6) Writing procedures with Declare, fetch and close cursor Example of each type of cursors.
+Question: 6) Create Before Triggers Create After Triggers.
 ===========================================================================================================
-
-(declare, open, fetch, close)
-==========================================================================================
-
+1. Before Insert Trigger
+========================================================================================
 delimiter //
 
-create procedure cursordemo()
+create trigger before_insert_employee
+before insert on employee
+for each row
 begin
-declare v_empid int;
-declare v_empname varchar(50);
-declare done int default 0;
-
-declare emp_cursor cursor for
-select empid,empname from employee;
-
-declare continue handler for not found
-set done=1;
-
-open emp_cursor;
-
-read_loop: loop
-
-fetch emp_cursor into v_empid,v_empname;
-
-if done=1 then
-leave read_loop;
+if new.salary < 0 then
+set new.salary = 0;
 end if;
-
-select v_empid,v_empname;
-
-end loop;
-
-close emp_cursor;
-
 end //
 
 delimiter ;
 
+mysql> insert into employee values (108,'rahul',-10000);
+Query OK, 1 row affected (0.01 sec)
 
-mysql> call cursordemo();
-+---------+-----------+
-| v_empid | v_empname |
-+---------+-----------+
-|     101 | vikrant   |
-+---------+-----------+
-1 row in set (0.02 sec)
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|   101 | vikrant | 50000.00 |
+|   102 | rahul   | 30000.00 |
+|   103 | sneha   | 70000.00 |
+|   108 | rahul   |     0.00 |
++-------+---------+----------+
+4 rows in set (0.00 sec)
 
-+---------+-----------+
-| v_empid | v_empname |
-+---------+-----------+
-|     102 | rahul     |
-+---------+-----------+
-1 row in set (0.03 sec)
+======================================================================================================
 
-+---------+-----------+
-| v_empid | v_empname |
-+---------+-----------+
-|     103 | sneha     |
-+---------+-----------+
-1 row in set (0.03 sec)
-
-Query OK, 0 rows affected (0.03 sec)
-================================================================================
-Cursor Example using salary
-==========================================================================================
+2. Before Update Trigger
+========================================================================================
 
 delimiter //
 
-create procedure salarycursor()
+create trigger before_update_employee
+before update on employee
+for each row
 begin
-declare v_name varchar(50);
-declare v_salary int;
-declare done int default 0;
-
-declare cur cursor for
-select empname,salary from employee;
-
-declare continue handler for not found
-set done=1;
-
-open cur;
-
-read_loop: loop
-
-fetch cur into v_name,v_salary;
-
-if done=1 then
-leave read_loop;
+if new.salary < 0 then
+set new.salary = old.salary;
 end if;
-
-select v_name,v_salary;
-
-end loop;
-
-close cur;
-
 end //
 
 delimiter ;
 
-mysql> call salarycursor();
-+---------+----------+
-| v_name  | v_salary |
-+---------+----------+
-| vikrant |    50000 |
-+---------+----------+
-1 row in set (0.01 sec)
+mysql> update employee set salary=-5000 where empid=101;
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
 
-+--------+----------+
-| v_name | v_salary |
-+--------+----------+
-| rahul  |    30000 |
-+--------+----------+
-1 row in set (0.01 sec)
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|   101 | vikrant | 50000.00 |
+|   102 | rahul   | 30000.00 |
+|   103 | sneha   | 70000.00 |
+|   108 | rahul   |     0.00 |
++-------+---------+----------+
+4 rows in set (0.00 sec)
 
-+--------+----------+
-| v_name | v_salary |
-+--------+----------+
-| sneha  |    70000 |
-+--------+----------+
-1 row in set (0.02 sec)
+======================================================================================================
 
-Query OK, 0 rows affected (0.02 sec)
+3. After insert Trigger
+========================================================================================
 
-=======================================================================================
+delimiter //
+
+create trigger after_insert_employee
+after insert on employee
+for each row
+begin
+insert into employee_audit(message)
+values(concat('new employee inserted : ',new.empname));
+end //
+
+delimiter ;
+
+mysql> insert into employee values (109,'sneha',60000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employee_audit;
++----+-------------------------------+
+| id | message                       |
++----+-------------------------------+
+|  1 | new employee inserted : sneha |
++----+-------------------------------+
+1 row in set (0.00 sec)
+
+
+======================================================================================================
+
+4. After update Trigger
+========================================================================================
+
+delimiter //
+
+create trigger after_update_employee
+after update on employee
+for each row
+begin
+insert into employee_audit(message)
+values(concat('salary updated for : ',new.empname));
+end //
+
+delimiter ;
+
+mysql> update employee set salary=70000 where empid=103;
+Query OK, 0 rows affected (0.01 sec)
+Rows matched: 1  Changed: 0  Warnings: 0
+
+mysql> select * from employee_audit;
++----+-------------------------------+
+| id | message                       |
++----+-------------------------------+
+|  1 | new employee inserted : sneha |
+|  2 | salary updated for : sneha    |
++----+-------------------------------+
+2 rows in set (0.00 sec)
+

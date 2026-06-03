@@ -146,3 +146,333 @@ mysql> select department,avg(salary) from employee group by department having av
 | finance    | 55000.000000 |
 +------------+--------------+
 2 rows in set (0.00 sec)
+mysql> select * from student where sname like 'v%';
++-----+---------+------+-------+-------------------+
+| sid | sname   | city | marks | email             |
++-----+---------+------+-------+-------------------+
+|   1 | vikrant | pune |    85 | vikrant@gmail.com |
++-----+---------+------+-------+-------------------+
+1 row in set (0.01 sec)
+
+mysql> select * from student where sname like '%a';
++-----+-------+--------+-------+-----------------+
+| sid | sname | city   | marks | email           |
++-----+-------+--------+-------+-----------------+
+|   3 | sneha | pune   |    90 | sneha@gmail.com |
+|   4 | priya | nashik |    65 | NULL            |
++-----+-------+--------+-------+-----------------+
+2 rows in set (0.00 sec)
+
+mysql> select * from student where sname like '%h%';
++-----+-------+--------+-------+-----------------+
+| sid | sname | city   | marks | email           |
++-----+-------+--------+-------+-----------------+
+|   2 | rahul | mumbai |    75 | NULL            |
+|   3 | sneha | pune   |    90 | sneha@gmail.com |
++-----+-------+--------+-------+-----------------+
+2 rows in set (0.00 sec)
+
+mysql> select distinct city from student;
++--------+
+| city   |
++--------+
+| pune   |
+| mumbai |
+| nashik |
++--------+
+3 rows in set (0.01 sec)
+
+mysql> select * from student order by marks;
++-----+---------+--------+-------+-------------------+
+| sid | sname   | city   | marks | email             |
++-----+---------+--------+-------+-------------------+
+|   4 | priya   | nashik |    65 | NULL              |
+|   2 | rahul   | mumbai |    75 | NULL              |
+|   5 | amit    | mumbai |    80 | amit@gmail.com    |
+|   1 | vikrant | pune   |    85 | vikrant@gmail.com |
+|   3 | sneha   | pune   |    90 | sneha@gmail.com   |
++-----+---------+--------+-------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from student order by marks desc;
++-----+---------+--------+-------+-------------------+
+| sid | sname   | city   | marks | email             |
++-----+---------+--------+-------+-------------------+
+|   3 | sneha   | pune   |    90 | sneha@gmail.com   |
+|   1 | vikrant | pune   |    85 | vikrant@gmail.com |
+|   5 | amit    | mumbai |    80 | amit@gmail.com    |
+|   2 | rahul   | mumbai |    75 | NULL              |
+|   4 | priya   | nashik |    65 | NULL              |
++-----+---------+--------+-------+-------------------+
+5 rows in set (0.00 sec)
+
+mysql> select * from student where marks between 70 and 90;
++-----+---------+--------+-------+-------------------+
+| sid | sname   | city   | marks | email             |
++-----+---------+--------+-------+-------------------+
+|   1 | vikrant | pune   |    85 | vikrant@gmail.com |
+|   2 | rahul   | mumbai |    75 | NULL              |
+|   3 | sneha   | pune   |    90 | sneha@gmail.com   |
+|   5 | amit    | mumbai |    80 | amit@gmail.com    |
++-----+---------+--------+-------+-------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from student where email is null;
++-----+-------+--------+-------+-------+
+| sid | sname | city   | marks | email |
++-----+-------+--------+-------+-------+
+|   2 | rahul | mumbai |    75 | NULL  |
+|   4 | priya | nashik |    65 | NULL  |
++-----+-------+--------+-------+-------+
+2 rows in set (0.00 sec)
+
+mysql> select * from student where email is not null;
++-----+---------+--------+-------+-------------------+
+| sid | sname   | city   | marks | email             |
++-----+---------+--------+-------+-------------------+
+|   1 | vikrant | pune   |    85 | vikrant@gmail.com |
+|   3 | sneha   | pune   |    90 | sneha@gmail.com   |
+|   5 | amit    | mumbai |    80 | amit@gmail.com    |
++-----+---------+--------+-------+-------------------+
+3 rows in set (0.00 sec)
+
+mysql> select * from student where city in ('pune','mumbai');
++-----+---------+--------+-------+-------------------+
+| sid | sname   | city   | marks | email             |
++-----+---------+--------+-------+-------------------+
+|   1 | vikrant | pune   |    85 | vikrant@gmail.com |
+|   2 | rahul   | mumbai |    75 | NULL              |
+|   3 | sneha   | pune   |    90 | sneha@gmail.com   |
+|   5 | amit    | mumbai |    80 | amit@gmail.com    |
++-----+---------+--------+-------+-------------------+
+4 rows in set (0.00 sec)
+
+mysql> select * from student where city not in ('pune','mumbai');
++-----+-------+--------+-------+-------+
+| sid | sname | city   | marks | email |
++-----+-------+--------+-------+-------+
+|   4 | priya | nashik |    65 | NULL  |
++-----+-------+--------+-------+-------+
+1 row in set (0.00 sec)
+
+mysql> select * from student where city in ('pune','mumbai') and marks between 70 and 90 order by marks desc;
++-----+---------+--------+-------+-------------------+
+| sid | sname   | city   | marks | email             |
++-----+---------+--------+-------+-------------------+
+|   3 | sneha   | pune   |    90 | sneha@gmail.com   |
+|   1 | vikrant | pune   |    85 | vikrant@gmail.com |
+|   5 | amit    | mumbai |    80 | amit@gmail.com    |
+|   2 | rahul   | mumbai |    75 | NULL              |
++-----+---------+--------+-------+-------------------+
+4 rows in set (0.00 sec)
+
+mysql> table department;
++--------+----------+
+| deptid | deptname |
++--------+----------+
+|      1 | it       |
+|      2 | hr       |
+|      4 | finance  |
++--------+----------+
+3 rows in set (0.00 sec)
+
+mysql> select empname from employee union select deptname from department;
++---------+
+| empname |
++---------+
+| vikrant |
+| rahul   |
+| sneha   |
+| priya   |
+| it      |
+| hr      |
+| finance |
++---------+
+7 rows in set (0.01 sec)
+
+mysql> select empname from employee union all select deptname from department;
++---------+
+| empname |
++---------+
+| vikrant |
+| rahul   |
+| sneha   |
+| priya   |
+| it      |
+| hr      |
+| finance |
++---------+
+7 rows in set (0.00 sec)
+
+mysql> select e.empid,e.empname,d.deptname from employee e inner join department d on e.deptid=d.deptid;
++-------+---------+----------+
+| empid | empname | deptname |
++-------+---------+----------+
+|   101 | vikrant | it       |
+|   102 | rahul   | hr       |
+|   103 | sneha   | it       |
++-------+---------+----------+
+3 rows in set (0.01 sec)
+
+mysql> select e.empid,e.empname,d.deptname from employee e left join department d on e.deptid=d.deptid;
++-------+---------+----------+
+| empid | empname | deptname |
++-------+---------+----------+
+|   101 | vikrant | it       |
+|   102 | rahul   | hr       |
+|   103 | sneha   | it       |
+|   104 | priya   | NULL     |
++-------+---------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select e.empid,e.empname,d.deptname from employee e right join department d on e.deptid=d.deptid;
++-------+---------+----------+
+| empid | empname | deptname |
++-------+---------+----------+
+|   103 | sneha   | it       |
+|   101 | vikrant | it       |
+|   102 | rahul   | hr       |
+|  NULL | NULL    | finance  |
++-------+---------+----------+
+4 rows in set (0.00 sec)
+
+mysql> select e.empid,e.empname,d.deptname from employee e left join department d on e.deptid=d.deptid union select e.empid,e.empname,d.deptname from employee e right join department d on e.deptid=d.deptid;
++-------+---------+----------+
+| empid | empname | deptname |
++-------+---------+----------+
+|   101 | vikrant | it       |
+|   102 | rahul   | hr       |
+|   103 | sneha   | it       |
+|   104 | priya   | NULL     |
+|  NULL | NULL    | finance  |
++-------+---------+----------+
+5 rows in set (0.00 sec)
+
+mysql> select e.empname,d.deptname from employee e cross join department d;
++---------+----------+
+| empname | deptname |
++---------+----------+
+| vikrant | finance  |
+| vikrant | hr       |
+| vikrant | it       |
+| rahul   | finance  |
+| rahul   | hr       |
+| rahul   | it       |
+| sneha   | finance  |
+| sneha   | hr       |
+| sneha   | it       |
+| priya   | finance  |
+| priya   | hr       |
+| priya   | it       |
++---------+----------+
+12 rows in set (0.00 sec)
+
+mysql> select e.empid,e.empname,d.deptname from employee e,department d where e.deptid=d.deptid;
++-------+---------+----------+
+| empid | empname | deptname |
++-------+---------+----------+
+|   101 | vikrant | it       |
+|   102 | rahul   | hr       |
+|   103 | sneha   | it       |
++-------+---------+----------+
+3 rows in set (0.00 sec)
+
+mysql> create table staff (id int primary key,name varchar(50),managerid int);
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> insert into staff values (1,'vikrant',null);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> insert into staff values (2,'rahul',1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> insert into staff values (3,'sneha',1);
+Query OK, 1 row affected (0.01 sec)
+
+
+mysql> table staff;
++----+---------+-----------+
+| id | name    | managerid |
++----+---------+-----------+
+|  1 | vikrant |      NULL |
+|  2 | rahul   |         1 |
+|  3 | sneha   |         1 |
++----+---------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> select s1.name as employee,s2.name as manager from staff s1 left join staff s2 on s1.managerid=s2.id;
++----------+---------+
+| employee | manager |
++----------+---------+
+| vikrant  | NULL    |
+| rahul    | vikrant |
+| sneha    | vikrant |
++----------+---------+
+3 rows in set (0.00 sec)
+
+mysql> create table employee_structure as select * from employee where 1=0;
+Query OK, 0 rows affected (0.04 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee_structure;
+Empty set (0.00 sec)
+
+mysql> create table employee_backup as select * from employee;
+Query OK, 3 rows affected (0.03 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee_backup;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     1 | vikrant | 50000.00 |
+|     2 | rahul   | 45000.00 |
+|     3 | sneha   | 55000.00 |
++-------+---------+----------+
+3 rows in set (0.00 sec)
+
+mysql> insert into employee_structure select * from employee;
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee_structure;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     1 | vikrant | 50000.00 |
+|     2 | rahul   | 45000.00 |
+|     3 | sneha   | 55000.00 |
++-------+---------+----------+
+3 rows in set (0.00 sec)
+
+mysql> create table employee_new like employee;
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> select * from employee_new;
+Empty set (0.01 sec)
+
+mysql> insert into employee_new select * from employee where salary>50000;
+Query OK, 1 row affected (0.01 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> select * from employee_new;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     3 | sneha   | 55000.00 |
++-------+---------+----------+
+1 row in set (0.00 sec)
+
+mysql> insert into employee (empname,salary) values ('amit',60000);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from employee;
++-------+---------+----------+
+| empid | empname | salary   |
++-------+---------+----------+
+|     1 | vikrant | 50000.00 |
+|     2 | rahul   | 45000.00 |
+|     3 | sneha   | 55000.00 |
+|     4 | amit    | 60000.00 |
++-------+---------+----------+
+4 rows in set (0.00 sec)
